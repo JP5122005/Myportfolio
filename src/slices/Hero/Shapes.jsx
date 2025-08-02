@@ -79,15 +79,14 @@ function Geometries() {
   });
 
   const materials = [
-    new THREE.MeshStandardMaterial({ color: 0x3b82f6, roughness: 0.1, metalness: 0.8 }), // Bright blue
-    new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.2 }), // Emerald green
-    new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.3 }), // Amber
-    new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.2 }), // Red
-    new THREE.MeshStandardMaterial({ color: 0xa855f7, roughness: 0.2 }), // Purple
-    new THREE.MeshStandardMaterial({ color: 0x06b6d4, roughness: 0.1 }), // Cyan
-    new THREE.MeshStandardMaterial({ color: 0xf97316, roughness: 0.3 }), // Orange
-    new THREE.MeshStandardMaterial({ color: 0xec4899, roughness: 0.2 }), // Pink
-    new THREE.MeshStandardMaterial({ color: 0x8b5cf6, roughness: 0.1, metalness: 0.6 }), // Violet
+    new THREE.MeshNormalMaterial(),
+    new THREE.MeshStandardMaterial({ color: 0x2ecc71 }),
+    new THREE.MeshStandardMaterial({ color: 0xf1c40f }),
+    new THREE.MeshStandardMaterial({ color: 0xe74c3c }),
+    new THREE.MeshStandardMaterial({ color: 0x8e44ad }),
+    new THREE.MeshStandardMaterial({ color: 0x1abc9c }),
+    new THREE.MeshStandardMaterial({ color: 0x2980b9 }),
+    new THREE.MeshStandardMaterial({ color: 0x34495e }),
   ];
 
   return geometries.map(({ position, r, geometry }) => (
