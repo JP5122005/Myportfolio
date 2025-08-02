@@ -1,18 +1,34 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { createClient } from "@/utils/static-client";
+import { getProjectByUid } from "@/db/queries";
 import ContentBody from "../../../components/ContentBody";
 
 type Params = { uid: string };
 
 export default async function Page({ params }: { params: Params }) {
-  const client = createClient();
-  
   try {
-    const page = await client.getByUID("project", params.uid);
+    const project = await getProjectByUid(params.uid);
+
+    if (!project || !project.published) {
+      notFound();
+    }
+
+    // Convert database format to expected page format
+    const page = {
+      uid: project.uid,
+      data: {
+        title: project.title,
+        date: project.date,
+        hover_image: project.hoverImage ? { url: project.hoverImage, alt: project.title } : null,
+        slices: project.content ? JSON.parse(project.content) : []
+      },
+      tags: project.tags ? project.tags.split(',').map(tag => tag.trim()) : []
+    };
+
     return <ContentBody page={page} />;
   } catch (error) {
+    console.error('Error fetching project:', error);
     notFound();
   }
 }
@@ -22,14 +38,19 @@ export async function generateMetadata({
 }: {
   params: Params;
 }): Promise<Metadata> {
-  const client = createClient();
-  
   try {
-    const page = await client.getByUID("project", params.uid);
-    
+    const project = await getProjectByUid(params.uid);
+
+    if (!project) {
+      return {
+        title: "Project Not Found",
+        description: "The requested project was not found.",
+      };
+    }
+
     return {
-      title: page.data.title,
-      description: `Project: ${page.data.title}`,
+      title: project.title,
+      description: project.description || `Project: ${project.title}`,
     };
   } catch (error) {
     return {
@@ -39,11 +60,5 @@ export async function generateMetadata({
   }
 }
 
-export async function generateStaticParams() {
-  const client = createClient();
-  const pages = await client.getAllByType("project");
-
-  return pages.map((page) => {
-    return { uid: page.uid };
-  });
-}
+// We don't need generateStaticParams for database-driven content
+// Next.js will generate pages on-demand
