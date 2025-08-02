@@ -1,14 +1,52 @@
-import { staticSettings, staticHomepage, staticBlogPosts, staticProjects } from '@/data/static-data';
-import { StaticSettings, StaticPage, StaticBlogPost, StaticProject } from '@/data/types';
+import { 
+  getSettings, 
+  getHomepage, 
+  getAllBlogPosts, 
+  getAllProjects,
+  getBlogPostByUid,
+  getProjectByUid 
+} from '@/db/queries';
+import type { StaticSettings, StaticPage, StaticBlogPost, StaticProject } from '@/data/types';
 
-// Mock client to replace Prismic client functionality
+// Database client to replace Prismic client functionality
 export class StaticClient {
   async getSingle(type: string): Promise<any> {
     switch (type) {
-      case 'settings':
-        return { data: staticSettings };
-      case 'homepage':
-        return { data: staticHomepage };
+      case 'settings': {
+        const settings = await getSettings();
+        if (!settings) {
+          throw new Error('Settings not found');
+        }
+        
+        // Transform database format to expected format
+        return {
+          data: {
+            meta_title: settings.metaTitle,
+            meta_description: settings.metaDescription,
+            name: settings.name,
+            nav_item: settings.navItems,
+            cta_link: { url: settings.ctaLink },
+            cta_label: settings.ctaLabel,
+            github_link: { url: settings.githubLink },
+            twitter_link: { url: settings.twitterLink },
+            linkedin_link: { url: settings.linkedinLink },
+          } as StaticSettings
+        };
+      }
+      case 'homepage': {
+        const homepage = await getHomepage();
+        if (!homepage) {
+          throw new Error('Homepage not found');
+        }
+        
+        return {
+          data: {
+            meta_title: homepage.metaTitle,
+            meta_description: homepage.metaDescription,
+            slices: homepage.slices,
+          } as StaticPage
+        };
+      }
       default:
         throw new Error(`Unknown document type: ${type}`);
     }
@@ -16,12 +54,87 @@ export class StaticClient {
 
   async getAllByType(type: string): Promise<any[]> {
     switch (type) {
-      case 'blog_post':
-        return staticBlogPosts;
-      case 'project':
-        return staticProjects;
+      case 'blog_post': {
+        const posts = await getAllBlogPosts(true);
+        return posts.map(post => ({
+          uid: post.uid,
+          data: {
+            title: post.title,
+            date: post.date,
+            hover_image: post.hoverImageUrl ? {
+              url: post.hoverImageUrl,
+              alt: post.hoverImageAlt || ''
+            } : undefined,
+            slices: post.slices,
+          },
+          tags: Array.isArray(post.tags) ? post.tags : [],
+        } as StaticBlogPost));
+      }
+      case 'project': {
+        const projects = await getAllProjects(true);
+        return projects.map(project => ({
+          uid: project.uid,
+          data: {
+            title: project.title,
+            date: project.date,
+            hover_image: project.hoverImageUrl ? {
+              url: project.hoverImageUrl,
+              alt: project.hoverImageAlt || ''
+            } : undefined,
+            slices: project.slices,
+          },
+          tags: Array.isArray(project.tags) ? project.tags : [],
+        } as StaticProject));
+      }
       default:
         return [];
+    }
+  }
+
+  async getByUID(type: string, uid: string): Promise<any> {
+    switch (type) {
+      case 'blog_post': {
+        const post = await getBlogPostByUid(uid);
+        if (!post) {
+          throw new Error(`Blog post with UID "${uid}" not found`);
+        }
+        
+        return {
+          uid: post.uid,
+          data: {
+            title: post.title,
+            date: post.date,
+            hover_image: post.hoverImageUrl ? {
+              url: post.hoverImageUrl,
+              alt: post.hoverImageAlt || ''
+            } : undefined,
+            slices: post.slices,
+          },
+          tags: Array.isArray(post.tags) ? post.tags : [],
+        } as StaticBlogPost;
+      }
+      case 'project': {
+        const project = await getProjectByUid(uid);
+        if (!project) {
+          throw new Error(`Project with UID "${uid}" not found`);
+        }
+        
+        return {
+          uid: project.uid,
+          data: {
+            title: project.title,
+            date: project.date,
+            hover_image: project.hoverImageUrl ? {
+              url: project.hoverImageUrl,
+              alt: project.hoverImageAlt || ''
+            } : undefined,
+            slices: project.slices,
+          },
+          tags: Array.isArray(project.tags) ? project.tags : [],
+        } as StaticProject;
+      }
+      default:
+        throw new Error(`Unknown document type: ${type}`);
     }
   }
 }
