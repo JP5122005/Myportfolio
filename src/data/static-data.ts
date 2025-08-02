@@ -207,10 +207,25 @@ export const staticProjects: StaticProject[] = [
     uid: "3d-portfolio",
     data: {
       title: "3D Portfolio Website",
+      date: "2024-01-01",
       hover_image: {
         url: "https://via.placeholder.com/320x220/64748b/f1f5f9?text=Portfolio",
         alt: "3D Portfolio"
-      }
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "A modern 3D portfolio website built with Next.js and Three.js featuring interactive animations and smooth user experience."
+              }
+            ]
+          }
+        }
+      ]
     },
     tags: ["React", "Three.js", "Next.js"]
   },
@@ -218,10 +233,25 @@ export const staticProjects: StaticProject[] = [
     uid: "e-commerce-app",
     data: {
       title: "E-commerce Application",
+      date: "2023-12-15",
       hover_image: {
         url: "https://via.placeholder.com/320x220/059669/ffffff?text=E-commerce",
         alt: "E-commerce app"
-      }
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "A full-stack e-commerce application with user authentication, payment processing, and inventory management."
+              }
+            ]
+          }
+        }
+      ]
     },
     tags: ["React", "Node.js", "MongoDB"]
   },
@@ -229,10 +259,25 @@ export const staticProjects: StaticProject[] = [
     uid: "task-management",
     data: {
       title: "Task Management System",
+      date: "2023-11-20",
       hover_image: {
         url: "https://via.placeholder.com/320x220/7c3aed/ffffff?text=Tasks",
         alt: "Task management"
-      }
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "A collaborative task management system with real-time updates, team collaboration features, and progress tracking."
+              }
+            ]
+          }
+        }
+      ]
     },
     tags: ["Vue.js", "Express", "PostgreSQL"]
   }
