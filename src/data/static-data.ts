@@ -179,7 +179,7 @@ export const staticBlogPosts: StaticBlogPost[] = [
       title: "Mastering TypeScript",
       date: "2024-01-10",
       hover_image: {
-        url: "https://via.placeholder.com/320x220/3178c6/ffffff?text=TypeScript",
+        url: "https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
         alt: "TypeScript guide"
       },
       slices: [
