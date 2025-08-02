@@ -153,7 +153,7 @@ export const staticBlogPosts: StaticBlogPost[] = [
       title: "Getting Started with Next.js",
       date: "2024-01-15",
       hover_image: {
-        url: "https://via.placeholder.com/320x220/0070f3/ffffff?text=Next.js",
+        url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
         alt: "Next.js tutorial"
       },
       slices: [
