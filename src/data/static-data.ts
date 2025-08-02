@@ -261,7 +261,7 @@ export const staticProjects: StaticProject[] = [
       title: "Task Management System",
       date: "2023-11-20",
       hover_image: {
-        url: "https://via.placeholder.com/320x220/7c3aed/ffffff?text=Tasks",
+        url: "https://images.unsplash.com/photo-1611224923853-80b023f02d71?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
         alt: "Task management"
       },
       slices: [
