@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Params }) {
         hover_image: blogPost.hoverImage ? { url: blogPost.hoverImage, alt: blogPost.title } : null,
         slices: blogPost.content ? JSON.parse(blogPost.content) : []
       },
-      tags: blogPost.tags ? blogPost.tags.split(',').map(tag => tag.trim()) : []
+      tags: blogPost.tags && typeof blogPost.tags === 'string' ? blogPost.tags.split(',').map(tag => tag.trim()) : []
     };
 
     return <ContentBody page={page} />;
