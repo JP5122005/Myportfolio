@@ -3,7 +3,6 @@ import Heading from "../../components/Heading";
 import { isFilled } from "@/utils/static-client";
 import { PrismicRichText } from "@/components/StaticComponents";
 import ContentList from "./ContentList";
-import { createClient } from "@/utils/static-client";
 
 /**
  * Props for `ContentIndex`.
