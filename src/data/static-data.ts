@@ -235,7 +235,7 @@ export const staticProjects: StaticProject[] = [
       title: "E-commerce Application",
       date: "2023-12-15",
       hover_image: {
-        url: "https://via.placeholder.com/320x220/059669/ffffff?text=E-commerce",
+        url: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
         alt: "E-commerce app"
       },
       slices: [
