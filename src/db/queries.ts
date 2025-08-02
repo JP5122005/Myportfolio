@@ -15,23 +15,30 @@ import {
   type NewHomepage 
 } from "./schema";
 
+// Check if database is available
+const isDatabaseAvailable = () => db !== null;
+
 // Settings queries
 export async function getSettings(): Promise<Settings | null> {
-  const settings = await db.select().from(settingsTable).limit(1);
+  if (!isDatabaseAvailable()) return null;
+  
+  const settings = await db!.select().from(settingsTable).limit(1);
   return settings[0] || null;
 }
 
 export async function updateSettings(data: Partial<NewSettings>): Promise<Settings | null> {
+  if (!isDatabaseAvailable()) return null;
+  
   const existing = await getSettings();
   
   if (existing) {
-    const [updated] = await db.update(settingsTable)
+    const [updated] = await db!.update(settingsTable)
       .set({ ...data, updatedAt: new Date() })
       .where(eq(settingsTable.id, existing.id))
       .returning();
     return updated;
   } else {
-    const [created] = await db.insert(settingsTable)
+    const [created] = await db!.insert(settingsTable)
       .values(data as NewSettings)
       .returning();
     return created;
@@ -40,21 +47,25 @@ export async function updateSettings(data: Partial<NewSettings>): Promise<Settin
 
 // Homepage queries
 export async function getHomepage(): Promise<Homepage | null> {
-  const homepage = await db.select().from(homepageTable).limit(1);
+  if (!isDatabaseAvailable()) return null;
+  
+  const homepage = await db!.select().from(homepageTable).limit(1);
   return homepage[0] || null;
 }
 
 export async function updateHomepage(data: Partial<NewHomepage>): Promise<Homepage | null> {
+  if (!isDatabaseAvailable()) return null;
+  
   const existing = await getHomepage();
   
   if (existing) {
-    const [updated] = await db.update(homepageTable)
+    const [updated] = await db!.update(homepageTable)
       .set({ ...data, updatedAt: new Date() })
       .where(eq(homepageTable.id, existing.id))
       .returning();
     return updated;
   } else {
-    const [created] = await db.insert(homepageTable)
+    const [created] = await db!.insert(homepageTable)
       .values(data as NewHomepage)
       .returning();
     return created;
@@ -63,7 +74,9 @@ export async function updateHomepage(data: Partial<NewHomepage>): Promise<Homepa
 
 // Blog post queries
 export async function getAllBlogPosts(publishedOnly = true): Promise<BlogPost[]> {
-  const query = db.select().from(blogPostsTable);
+  if (!isDatabaseAvailable()) return [];
+  
+  const query = db!.select().from(blogPostsTable);
   
   if (publishedOnly) {
     return await query.where(eq(blogPostsTable.published, true))
@@ -74,7 +87,9 @@ export async function getAllBlogPosts(publishedOnly = true): Promise<BlogPost[]>
 }
 
 export async function getBlogPostByUid(uid: string): Promise<BlogPost | null> {
-  const posts = await db.select()
+  if (!isDatabaseAvailable()) return null;
+  
+  const posts = await db!.select()
     .from(blogPostsTable)
     .where(eq(blogPostsTable.uid, uid))
     .limit(1);
@@ -83,7 +98,9 @@ export async function getBlogPostByUid(uid: string): Promise<BlogPost | null> {
 }
 
 export async function createBlogPost(data: NewBlogPost): Promise<BlogPost> {
-  const [created] = await db.insert(blogPostsTable)
+  if (!isDatabaseAvailable()) throw new Error('Database not available');
+  
+  const [created] = await db!.insert(blogPostsTable)
     .values({ ...data, createdAt: new Date(), updatedAt: new Date() })
     .returning();
   
@@ -91,7 +108,9 @@ export async function createBlogPost(data: NewBlogPost): Promise<BlogPost> {
 }
 
 export async function updateBlogPost(uid: string, data: Partial<NewBlogPost>): Promise<BlogPost | null> {
-  const [updated] = await db.update(blogPostsTable)
+  if (!isDatabaseAvailable()) return null;
+  
+  const [updated] = await db!.update(blogPostsTable)
     .set({ ...data, updatedAt: new Date() })
     .where(eq(blogPostsTable.uid, uid))
     .returning();
@@ -100,7 +119,9 @@ export async function updateBlogPost(uid: string, data: Partial<NewBlogPost>): P
 }
 
 export async function deleteBlogPost(uid: string): Promise<boolean> {
-  const result = await db.delete(blogPostsTable)
+  if (!isDatabaseAvailable()) return false;
+  
+  const result = await db!.delete(blogPostsTable)
     .where(eq(blogPostsTable.uid, uid));
   
   return result.rowCount > 0;
@@ -108,7 +129,9 @@ export async function deleteBlogPost(uid: string): Promise<boolean> {
 
 // Project queries
 export async function getAllProjects(publishedOnly = true): Promise<Project[]> {
-  const query = db.select().from(projectsTable);
+  if (!isDatabaseAvailable()) return [];
+  
+  const query = db!.select().from(projectsTable);
   
   if (publishedOnly) {
     return await query.where(eq(projectsTable.published, true))
@@ -119,7 +142,9 @@ export async function getAllProjects(publishedOnly = true): Promise<Project[]> {
 }
 
 export async function getProjectByUid(uid: string): Promise<Project | null> {
-  const projects = await db.select()
+  if (!isDatabaseAvailable()) return null;
+  
+  const projects = await db!.select()
     .from(projectsTable)
     .where(eq(projectsTable.uid, uid))
     .limit(1);
@@ -128,7 +153,9 @@ export async function getProjectByUid(uid: string): Promise<Project | null> {
 }
 
 export async function createProject(data: NewProject): Promise<Project> {
-  const [created] = await db.insert(projectsTable)
+  if (!isDatabaseAvailable()) throw new Error('Database not available');
+  
+  const [created] = await db!.insert(projectsTable)
     .values({ ...data, createdAt: new Date(), updatedAt: new Date() })
     .returning();
   
@@ -136,7 +163,9 @@ export async function createProject(data: NewProject): Promise<Project> {
 }
 
 export async function updateProject(uid: string, data: Partial<NewProject>): Promise<Project | null> {
-  const [updated] = await db.update(projectsTable)
+  if (!isDatabaseAvailable()) return null;
+  
+  const [updated] = await db!.update(projectsTable)
     .set({ ...data, updatedAt: new Date() })
     .where(eq(projectsTable.uid, uid))
     .returning();
@@ -145,7 +174,9 @@ export async function updateProject(uid: string, data: Partial<NewProject>): Pro
 }
 
 export async function deleteProject(uid: string): Promise<boolean> {
-  const result = await db.delete(projectsTable)
+  if (!isDatabaseAvailable()) return false;
+  
+  const result = await db!.delete(projectsTable)
     .where(eq(projectsTable.uid, uid));
   
   return result.rowCount > 0;
