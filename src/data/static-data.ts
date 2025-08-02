@@ -58,7 +58,7 @@ export const staticHomepage: StaticPage = {
         button_text: "Learn More",
         button_link: { url: "/about" },
         avatar: {
-          url: "https://via.placeholder.com/400x400/64748b/f1f5f9?text=JP",
+          url: "https://cdn.builder.io/api/v1/image/assets%2Fe71e97532f2844a185b2d79650e8b74b%2Facd7c9ab6e014da6a90cd85ddfe18f9d?format=webp&width=800",
           alt: "Jenil Patel"
         }
       }
