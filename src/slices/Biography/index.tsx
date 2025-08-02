@@ -2,14 +2,15 @@ import Avatar from "../../components/Avatar";
 import Bounded from "../../components/Bounded";
 import Button from "../../components/Button";
 import Heading from "../../components/Heading";
-import { Content } from "@prismicio/client";
 
-import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
+import { PrismicRichText } from "@/components/StaticComponents";
 
 /**
  * Props for `Biography`.
  */
-export type BiographyProps = SliceComponentProps<Content.BiographySlice>;
+export type BiographyProps = {
+  slice: any;
+};
 
 /**
  * Component for "Biography" Slices.
