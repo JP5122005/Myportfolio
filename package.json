@@ -12,11 +12,14 @@
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.1",
     "@react-three/drei": "^9.105.3",
     "@react-three/fiber": "^8.16.1",
     "@types/three": "^0.163.0",
     "@vercel/speed-insights": "^1.0.10",
     "clsx": "^2.1.0",
+    "drizzle-kit": "^0.31.4",
+    "drizzle-orm": "^0.44.4",
     "gsap": "^3.12.5",
     "next": "14.1.4",
     "react": "^18",
