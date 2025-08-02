@@ -8,14 +8,13 @@ type Params = { uid: string };
 
 export default async function Page({ params }: { params: Params }) {
   const client = createClient();
-  const projects = await client.getAllByType("project");
-  const page = projects.find(project => project.uid === params.uid);
-
-  if (!page) {
+  
+  try {
+    const page = await client.getByUID("project", params.uid);
+    return <ContentBody page={page} />;
+  } catch (error) {
     notFound();
   }
-
-  return <ContentBody page={page} />;
 }
 
 export async function generateMetadata({
@@ -24,20 +23,20 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const client = createClient();
-  const projects = await client.getAllByType("project");
-  const page = projects.find(project => project.uid === params.uid);
-
-  if (!page) {
+  
+  try {
+    const page = await client.getByUID("project", params.uid);
+    
+    return {
+      title: page.data.title,
+      description: `Project: ${page.data.title}`,
+    };
+  } catch (error) {
     return {
       title: "Project Not Found",
       description: "The requested project was not found.",
     };
   }
-
-  return {
-    title: page.data.title,
-    description: `Project: ${page.data.title}`,
-  };
 }
 
 export async function generateStaticParams() {
