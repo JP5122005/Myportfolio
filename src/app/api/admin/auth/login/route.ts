@@ -46,8 +46,8 @@ export async function POST(request: NextRequest) {
     // Set secure HTTP-only cookie for authentication
     response.cookies.set('admin-auth', 'authenticated', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: false, // Allow over HTTP in development
+      sameSite: 'lax', // Changed from strict to lax for better compatibility
       maxAge: 60 * 60 * 24 * 7, // 7 days
       path: '/',
     });
