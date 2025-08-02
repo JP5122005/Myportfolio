@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
@@ -11,7 +11,24 @@ interface AdminLayoutProps {
 }
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  const [currentPath, setCurrentPath] = useState('/admin');
+
+  // Ensure component is mounted on client before using hooks
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  let pathname = '/admin';
+  try {
+    if (mounted) {
+      pathname = usePathname();
+      setCurrentPath(pathname);
+    }
+  } catch (error) {
+    console.warn('Error getting pathname, using fallback:', error);
+    pathname = currentPath;
+  }
 
   const navItems = [
     { href: '/admin', label: 'Dashboard', exact: true },
@@ -19,6 +36,32 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     { href: '/admin/projects', label: 'Projects' },
     { href: '/admin/settings', label: 'Settings' },
   ];
+
+  // Don't render navigation until mounted to avoid hydration issues
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-900 text-white">
+        <nav className="bg-gray-800 border-b border-gray-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16">
+              <div className="flex">
+                <div className="flex-shrink-0 flex items-center">
+                  <Link href="/admin" className="text-xl font-bold text-white">
+                    Portfolio Admin
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+        <main className="py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   return (
     <ErrorBoundary>
