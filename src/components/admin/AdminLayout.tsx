@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import ErrorBoundary from './ErrorBoundary';
 
@@ -12,14 +12,25 @@ interface AdminLayoutProps {
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [mounted, setMounted] = useState(false);
-  
-  // Always call usePathname - never conditionally
   const pathname = usePathname();
+  const router = useRouter();
 
   // Ensure component is mounted on client
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/admin/auth/logout', {
+        method: 'POST',
+      });
+      router.push('/admin/login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   const navItems = [
     { href: '/admin', label: 'Dashboard', exact: true },
@@ -64,13 +75,19 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                   })}
                 </div>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center space-x-4">
                 <Link
                   href="/"
                   className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                 >
                   View Site
                 </Link>
+                <button
+                  onClick={handleLogout}
+                  className="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                >
+                  Logout
+                </button>
               </div>
             </div>
           </div>
