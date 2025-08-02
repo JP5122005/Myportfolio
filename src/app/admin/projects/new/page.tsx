@@ -1,0 +1,217 @@
+"use client";
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import AdminLayout from '@/components/admin/AdminLayout';
+import ImageUpload from '@/components/admin/ImageUpload';
+
+const NewProject = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    uid: '',
+    title: '',
+    date: new Date().toISOString().split('T')[0],
+    hoverImageUrl: '',
+    hoverImageAlt: '',
+    content: '',
+    tags: '',
+    published: true,
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const tagsArray = formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag);
+      
+      const slices = formData.content ? [{
+        slice_type: "text_block",
+        variation: "default",
+        primary: {
+          text: [{
+            type: "paragraph",
+            text: formData.content
+          }]
+        }
+      }] : [];
+
+      const response = await fetch('/api/admin/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uid: formData.uid,
+          title: formData.title,
+          date: formData.date,
+          hoverImageUrl: formData.hoverImageUrl || null,
+          hoverImageAlt: formData.hoverImageAlt || null,
+          slices,
+          tags: tagsArray,
+          published: formData.published,
+        }),
+      });
+
+      if (response.ok) {
+        router.push('/admin/projects');
+      } else {
+        const error = await response.json();
+        alert(`Error: ${error.error}`);
+      }
+    } catch (error) {
+      console.error('Error creating project:', error);
+      alert('Error creating project');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
+    }));
+  };
+
+  const handleImageUploaded = (imageUrl: string, altText?: string) => {
+    setFormData(prev => ({
+      ...prev,
+      hoverImageUrl: imageUrl,
+      hoverImageAlt: altText || '',
+    }));
+  };
+
+  return (
+    <AdminLayout>
+      <div>
+        <h1 className="text-3xl font-bold text-white mb-6">Create New Project</h1>
+        
+        <div className="bg-gray-800 shadow rounded-lg p-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="uid" className="block text-sm font-medium text-gray-300 mb-2">
+                UID (URL identifier)
+              </label>
+              <input
+                type="text"
+                id="uid"
+                name="uid"
+                required
+                value={formData.uid}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder="e.g., my-awesome-project"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="title" className="block text-sm font-medium text-gray-300 mb-2">
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                required
+                value={formData.title}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="date" className="block text-sm font-medium text-gray-300 mb-2">
+                Date
+              </label>
+              <input
+                type="date"
+                id="date"
+                name="date"
+                required
+                value={formData.date}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Project Image
+              </label>
+              <ImageUpload
+                onImageUploaded={handleImageUploaded}
+                currentImageUrl={formData.hoverImageUrl}
+                altText={formData.hoverImageAlt}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="content" className="block text-sm font-medium text-gray-300 mb-2">
+                Description
+              </label>
+              <textarea
+                id="content"
+                name="content"
+                rows={6}
+                value={formData.content}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder="Describe your project..."
+              />
+            </div>
+
+            <div>
+              <label htmlFor="tags" className="block text-sm font-medium text-gray-300 mb-2">
+                Tags (comma-separated)
+              </label>
+              <input
+                type="text"
+                id="tags"
+                name="tags"
+                value={formData.tags}
+                onChange={handleChange}
+                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder="React, Node.js, PostgreSQL"
+              />
+            </div>
+
+            <div>
+              <label className="flex items-center text-gray-300">
+                <input
+                  type="checkbox"
+                  name="published"
+                  checked={formData.published}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Published
+              </label>
+            </div>
+
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-green-600 hover:bg-green-700 disabled:bg-green-800 text-white px-6 py-2 rounded-md transition-colors"
+              >
+                {loading ? 'Creating...' : 'Create Project'}
+              </button>
+              <button
+                type="button"
+                onClick={() => router.push('/admin/projects')}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-md transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </AdminLayout>
+  );
+};
+
+export default NewProject;
