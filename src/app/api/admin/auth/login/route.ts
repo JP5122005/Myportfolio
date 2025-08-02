@@ -4,9 +4,29 @@ import { NextRequest, NextResponse } from 'next/server';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
 export async function POST(request: NextRequest) {
+  let body;
+
   try {
-    const { password } = await request.json();
-    
+    // Read the request body
+    body = await request.json();
+  } catch (error) {
+    console.error('Failed to parse request body:', error);
+    return NextResponse.json(
+      { error: 'Invalid request body' },
+      { status: 400 }
+    );
+  }
+
+  try {
+    const { password } = body;
+
+    if (!password) {
+      return NextResponse.json(
+        { error: 'Password is required' },
+        { status: 400 }
+      );
+    }
+
     console.log('Login attempt received'); // Debug log
     console.log('Password matches:', password === ADMIN_PASSWORD); // Debug log
 
@@ -22,7 +42,7 @@ export async function POST(request: NextRequest) {
 
     // Create response with auth cookie
     const response = NextResponse.json({ success: true });
-    
+
     // Set secure HTTP-only cookie for authentication
     response.cookies.set('admin-auth', 'authenticated', {
       httpOnly: true,
