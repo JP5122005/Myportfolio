@@ -198,6 +198,58 @@ export const staticBlogPosts: StaticBlogPost[] = [
       ]
     },
     tags: ["TypeScript", "JavaScript", "Programming"]
+  },
+  {
+    uid: "react-best-practices",
+    data: {
+      title: "React Best Practices for 2024",
+      date: "2024-01-05",
+      hover_image: {
+        url: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
+        alt: "React development"
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "Learn the latest React best practices, including hooks optimization, performance tips, and modern patterns."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    tags: ["React", "JavaScript", "Performance"]
+  },
+  {
+    uid: "modern-css-techniques",
+    data: {
+      title: "Modern CSS Techniques",
+      date: "2023-12-28",
+      hover_image: {
+        url: "https://images.unsplash.com/photo-1523437113738-bbd3cc89fb19?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
+        alt: "CSS development"
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "Explore modern CSS features like Grid, Flexbox, Custom Properties, and the latest layout techniques."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    tags: ["CSS", "Web Design", "Frontend"]
   }
 ];
 
