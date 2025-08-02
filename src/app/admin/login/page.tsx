@@ -29,10 +29,8 @@ const AdminLogin = () => {
       });
 
       if (response.ok) {
-        // Small delay to ensure cookie is set before redirect
-        setTimeout(() => {
-          window.location.href = '/admin';
-        }, 100);
+        // Use location.replace for better cookie handling
+        window.location.replace('/admin');
       } else {
         let errorMessage = 'Login failed';
         try {
