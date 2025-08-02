@@ -2,8 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { ImageField } from "@prismicio/client";
-import { PrismicNextImage } from "@prismicio/next";
+import { PrismicNextImage } from "@/components/StaticComponents";
 import clsx from "clsx";
 import usePrefersReducedMotion from "../app/hooks/usePrefersReducedMotion";
 
@@ -11,7 +10,7 @@ export default function Avatar({
   image,
   className,
 }: {
-  image: ImageField;
+  image: any;
   className?: string;
 }) {
   const component = useRef(null);
