@@ -126,41 +126,41 @@ export default function ContentList({
         className="grid border-b border-b-slate-100 "
         onMouseLeave={onMouseLeave}
       >
-        {items.map((item, index) => (
-          <>
-            {isFilled.keyText(item.data.title) && (
-              <li
-                key={index}
-                className="list-item opacity-0f "
-                onMouseEnter={() => onMouseEnter(index)}
-                ref={(el) => {
-                  if (el) itemsRef.current[index] = el;
-                }}
+        {items.map((item, index) => {
+          if (!isFilled.keyText(item.data.title)) return null;
+
+          return (
+            <li
+              key={item.uid || index}
+              className="list-item opacity-0f "
+              onMouseEnter={() => onMouseEnter(index)}
+              ref={(el) => {
+                if (el) itemsRef.current[index] = el;
+              }}
+            >
+              <Link
+                href={urlPrefixe + "/" + item.uid}
+                className="flex flex-col justify-between border-t border-t-slate-100 py-10 text-slate-200 md:flex-row "
+                aria-label={item.data.title}
               >
-                <Link
-                  href={urlPrefixe + "/" + item.uid}
-                  className="flex flex-col justify-between border-t border-t-slate-100 py-10 text-slate-200 md:flex-row "
-                  aria-label={item.data.title}
-                >
-                  <div className="flex flex-col">
-                    <span className="text-3xl font-bold">
-                      {item.data.title}
-                    </span>
-                    <div className="flex gap-3 text-yellow-400 text-lg font-bold">
-                      {item.tags.map((tag, index) => (
-                        <span key={index}>{tag}</span>
-                      ))}
-                    </div>
-                  </div>
-                  <span className="ml-auto flex items-center gap-2 text-xl font-medium md:ml-0">
-                    {viewMoreText}
-                    <MdArrowOutward />
+                <div className="flex flex-col">
+                  <span className="text-3xl font-bold">
+                    {item.data.title}
                   </span>
-                </Link>
-              </li>
-            )}
-          </>
-        ))}
+                  <div className="flex gap-3 text-yellow-400 text-lg font-bold">
+                    {item.tags.map((tag, tagIndex) => (
+                      <span key={tagIndex}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
+                <span className="ml-auto flex items-center gap-2 text-xl font-medium md:ml-0">
+                  {viewMoreText}
+                  <MdArrowOutward />
+                </span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
 
       {/* Hover Element */}
