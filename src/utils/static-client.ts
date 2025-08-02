@@ -44,6 +44,9 @@ export const isFilled = {
   },
   image: (image: any): boolean => {
     return image && typeof image.url === 'string' && image.url.length > 0;
+  },
+  date: (date: any): boolean => {
+    return typeof date === 'string' && date.length > 0;
   }
 };
 
