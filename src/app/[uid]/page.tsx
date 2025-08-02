@@ -8,7 +8,9 @@ import { components } from "@/slices";
 type Params = { uid: string };
 
 export default async function Page({ params }: { params: Params }) {
-  // For now, redirect to homepage since we don't have dynamic pages
+  // Handle any other dynamic pages that might be needed
+  // For now, most routes should go to specific static pages
+  // This is mainly for legacy or custom page routes
   notFound();
 }
 
