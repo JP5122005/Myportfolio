@@ -152,7 +152,7 @@ export const staticBlogPosts: StaticBlogPost[] = [
     data: {
       title: "Getting Started with Next.js",
       hover_image: {
-        url: "/images/blog/nextjs.jpg",
+        url: "https://via.placeholder.com/320x220/0070f3/ffffff?text=Next.js",
         alt: "Next.js tutorial"
       }
     },
@@ -163,7 +163,7 @@ export const staticBlogPosts: StaticBlogPost[] = [
     data: {
       title: "Mastering TypeScript",
       hover_image: {
-        url: "/images/blog/typescript.jpg",
+        url: "https://via.placeholder.com/320x220/3178c6/ffffff?text=TypeScript",
         alt: "TypeScript guide"
       }
     },
@@ -178,7 +178,7 @@ export const staticProjects: StaticProject[] = [
     data: {
       title: "3D Portfolio Website",
       hover_image: {
-        url: "/images/projects/portfolio.jpg",
+        url: "https://via.placeholder.com/320x220/64748b/f1f5f9?text=Portfolio",
         alt: "3D Portfolio"
       }
     },
@@ -189,7 +189,7 @@ export const staticProjects: StaticProject[] = [
     data: {
       title: "E-commerce Application",
       hover_image: {
-        url: "/images/projects/ecommerce.jpg",
+        url: "https://via.placeholder.com/320x220/059669/ffffff?text=E-commerce",
         alt: "E-commerce app"
       }
     },
@@ -200,7 +200,7 @@ export const staticProjects: StaticProject[] = [
     data: {
       title: "Task Management System",
       hover_image: {
-        url: "/images/projects/tasks.jpg",
+        url: "https://via.placeholder.com/320x220/7c3aed/ffffff?text=Tasks",
         alt: "Task management"
       }
     },
