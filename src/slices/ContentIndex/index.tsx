@@ -21,8 +21,6 @@ const ContentIndex = ({
   // Use static data directly instead of async client calls
   const contentType = slice.primary.content_type || "Blog";
 
-  // Import static data directly
-  const { staticBlogPosts, staticProjects } = require("@/data/static-data");
   const items = contentType === "Blog" ? staticBlogPosts : staticProjects;
 
 
