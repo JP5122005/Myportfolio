@@ -25,7 +25,13 @@ export function Shapes() {
             blur={1}
             far={9}
           />
-          <Environment preset="studio" />
+          {/* Studio lighting setup */}
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[10, 10, 5]} intensity={1.2} castShadow />
+          <directionalLight position={[-5, 8, 3]} intensity={0.8} color="#f8fafc" />
+          <pointLight position={[5, 5, 5]} intensity={0.6} color="#60a5fa" />
+          <pointLight position={[-5, -5, 2]} intensity={0.4} color="#a78bfa" />
+          <spotLight position={[0, 10, 0]} intensity={0.5} angle={0.3} penumbra={1} color="#fbbf24" />
         </Suspense>
       </Canvas>
     </div>
@@ -62,28 +68,25 @@ function Geometries() {
   ];
 
   const soundEffects = [
-    new Audio("/sounds/hit2.ogg"),
-    new Audio("/sounds/hit3.ogg"),
-    new Audio("/sounds/hit4.ogg"),
-  ];
+    "/sounds/hit2.ogg",
+    "/sounds/hit3.ogg",
+    "/sounds/hit4.ogg",
+  ].map(src => {
+    const audio = new Audio(src);
+    audio.preload = "auto";
+    audio.onerror = () => console.warn(`Failed to load audio: ${src}`);
+    return audio;
+  });
 
   const materials = [
     new THREE.MeshNormalMaterial(),
-    new THREE.MeshStandardMaterial({ color: 0x2ecc71, roughness: 0 }),
-    new THREE.MeshStandardMaterial({ color: 0xf1c40f, roughness: 0.4 }),
-    new THREE.MeshStandardMaterial({ color: 0xe74c3c, roughness: 0.1 }),
-    new THREE.MeshStandardMaterial({ color: 0x8e44ad, roughness: 0.1 }),
-    new THREE.MeshStandardMaterial({ color: 0x1abc9c, roughness: 0.1 }),
-    new THREE.MeshStandardMaterial({
-      roughness: 0,
-      metalness: 0.5,
-      color: 0x2980b9,
-    }),
-    new THREE.MeshStandardMaterial({
-      color: 0x2c3e50,
-      roughness: 0.1,
-      metalness: 0.5,
-    }),
+    new THREE.MeshStandardMaterial({ color: 0x2ecc71 }),
+    new THREE.MeshStandardMaterial({ color: 0xf1c40f }),
+    new THREE.MeshStandardMaterial({ color: 0xe74c3c }),
+    new THREE.MeshStandardMaterial({ color: 0x8e44ad }),
+    new THREE.MeshStandardMaterial({ color: 0x1abc9c }),
+    new THREE.MeshStandardMaterial({ color: 0x2980b9 }),
+    new THREE.MeshStandardMaterial({ color: 0x34495e }),
   ];
 
   return geometries.map(({ position, r, geometry }) => (
@@ -111,7 +114,13 @@ function Geometry({ r, position, geometry, soundEffects, materials }) {
   function handleClick(e) {
     const mesh = e.object;
 
-    gsap.utils.random(soundEffects).play();
+    // Play sound with error handling
+    try {
+      const audio = gsap.utils.random(soundEffects);
+      audio.play().catch(error => console.warn("Audio play failed:", error));
+    } catch (error) {
+      console.warn("Audio playback error:", error);
+    }
 
     gsap.to(mesh.rotation, {
       x: `+=${gsap.utils.random(0, 2)}`,

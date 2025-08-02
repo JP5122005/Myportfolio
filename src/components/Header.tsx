@@ -1,7 +1,7 @@
 import React from "react";
-import { createClient } from "@/prismicio";
+import { createClient } from "@/utils/static-client";
 import Link from "next/link";
-import { PrismicNextLink } from "@prismicio/next";
+import { PrismicNextLink } from "@/components/StaticComponents";
 import NavBar from "./NavBar";
 
 export default async function Header() {

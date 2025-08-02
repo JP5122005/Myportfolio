@@ -1,11 +1,11 @@
-import { Content } from "@prismicio/client";
-import { PrismicNextImage } from "@prismicio/next";
-import { SliceComponentProps } from "@prismicio/react";
+import { PrismicNextImage } from "@/components/StaticComponents";
 
 /**
  * Props for `ImageBlock`.
  */
-export type ImageBlockProps = SliceComponentProps<Content.ImageBlockSlice>;
+export type ImageBlockProps = {
+  slice: any;
+};
 
 /**
  * Component for "ImageBlock" Slices.

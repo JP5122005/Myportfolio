@@ -1,10 +1,10 @@
 import clsx from "clsx";
 import React from "react";
-import { createClient } from "@/prismicio";
-import { PrismicNextLink } from "@prismicio/next";
+import { createClient } from "@/utils/static-client";
+import { PrismicNextLink } from "@/components/StaticComponents";
 import Link from "next/link";
 import Bounded from "./Bounded";
-import { isFilled } from "@prismicio/client";
+import { isFilled } from "@/utils/static-client";
 import { FaGithub, FaTwitter, FaLinkedin, FaHeart } from "react-icons/fa6";
 
 export default async function Footer() {

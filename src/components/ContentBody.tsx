@@ -1,18 +1,18 @@
-import { SliceZone } from "@prismicio/react";
+import { SliceZone, PrismicNextImage } from "@/components/StaticComponents";
 import { components } from "@/slices";
 import Bounded from "./Bounded";
 import Heading from "./Heading";
-import { Content, DateField, isFilled } from "@prismicio/client";
+import { isFilled } from "@/utils/static-client";
 
 type Params = { uid: string };
 
 export default function ContentBody({
   page,
 }: {
-  page: Content.BlogPostDocument | Content.ProjectDocument;
+  page: any;
 }) {
-  function formatDate(date: DateField) {
-    if (isFilled.date(date)) {
+  function formatDate(date: string) {
+    if (date) {
       const dateOptions: Intl.DateTimeFormatOptions = {
         weekday: "long",
         year: "numeric",
@@ -23,6 +23,7 @@ export default function ContentBody({
         new Date(date)
       );
     }
+    return new Date().toLocaleDateString();
   }
   const formattedDate = formatDate(page.data.date);
 
@@ -33,17 +34,29 @@ export default function ContentBody({
     <Bounded as="article">
       <div className="rounded-2xl border-2 border-slate-800 bg-slate-900 px-4 py-10 md:px-8 md:py-20">
         <Heading as="h1">{page.data.title}</Heading>
-        <div className="flex gap-4 text-xl">
+        <div className="flex gap-4 text-base md:text-lg lg:text-xl">
           {page.tags.map((tag, index) => (
             <span key={tag}>
               <span className={hashColors[index % hashColors.length]}>#</span><span className="text-white">{tag}</span>
             </span>
           ))}
         </div>
-        <p className="mt-8 border-b border-b-slate-600 text-xl font-medium text-slate-300">
+        <p className="mt-8 border-b border-b-slate-600 text-base md:text-lg lg:text-xl font-medium text-slate-300">
           {formattedDate}
         </p>
-        <div className="prose prose-lg prose-invert mt-12 w-full max-w-none md:mt-20">
+
+        {/* Featured Image */}
+        {page.data.hover_image && (
+          <div className="mt-8 mb-8">
+            <PrismicNextImage
+              field={page.data.hover_image}
+              className="w-full h-auto rounded-lg object-cover max-h-96"
+              alt={page.data.title}
+            />
+          </div>
+        )}
+
+        <div className="prose prose-base md:prose-lg prose-invert mt-12 w-full max-w-none md:mt-20">
           <SliceZone slices={page.data.slices} components={components} />
         </div>
       </div>

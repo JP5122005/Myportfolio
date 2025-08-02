@@ -1,7 +1,5 @@
 "use client";
 
-import { Content } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
 import React, { useEffect } from "react";
 import { MdCircle } from "react-icons/md";
 import { gsap } from "gsap/gsap-core";
@@ -15,7 +13,9 @@ gsap.registerPlugin(ScrollTrigger);
 /**
  * Props for `TechList`.
  */
-export type TechListProps = SliceComponentProps<Content.TechListSlice>;
+export type TechListProps = {
+  slice: any;
+};
 
 /**
  * Component for "TechList" Slices.
@@ -75,14 +75,14 @@ const TechList = ({ slice }: TechListProps): JSX.Element => {
           {Array.from({ length: 15 }, (_, index) => (
             <React.Fragment key={index}>
               <span
-                className="tech-item text-8xl font-extrabold uppercase tracking-tighter"
+                className="tech-item text-4xl md:text-6xl lg:text-8xl font-extrabold uppercase tracking-tighter"
                 style={{
                   color: index === 7 && tech_color ? tech_color : "inherit",
                 }}
               >
                 {tech_name}
               </span>
-              <span className="text-3xl">
+              <span className="text-xl md:text-2xl lg:text-3xl">
                 <MdCircle />
               </span>
             </React.Fragment>

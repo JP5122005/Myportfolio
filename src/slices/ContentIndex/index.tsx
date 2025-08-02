@@ -1,28 +1,27 @@
 import Bounded from "../../components/Bounded";
 import Heading from "../../components/Heading";
-import { Content, isFilled } from "@prismicio/client";
-import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
+import { isFilled } from "@/utils/static-client";
+import { PrismicRichText } from "@/components/StaticComponents";
 import ContentList from "./ContentList";
-import { createClient } from "@/prismicio";
+import { staticBlogPosts, staticProjects } from "@/data/static-data";
 
 /**
  * Props for `ContentIndex`.
  */
-export type ContentIndexProps = SliceComponentProps<Content.ContentIndexSlice>;
+export type ContentIndexProps = {
+  slice: any;
+};
 
 /**
  * Component for "ContentIndex" Slices.
  */
-const ContentIndex = async ({
+const ContentIndex = ({
   slice,
-}: ContentIndexProps): Promise<JSX.Element> => {
-  const client = createClient();
-  const blogPosts = await client.getAllByType("blog_post");
-  const projects = await client.getAllByType("project");
+}: ContentIndexProps): JSX.Element => {
+  // Use static data directly instead of async client calls
+  const contentType = slice.primary.content_type || "Blog";
 
-  const contentType = slice.primary.content_type || "Blog"
-
-  const items = contentType === "Blog" ? blogPosts : projects;
+  const items = contentType === "Blog" ? staticBlogPosts : staticProjects;
 
 
   return (

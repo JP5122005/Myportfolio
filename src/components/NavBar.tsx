@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import React, { useState } from "react";
-import { Content, KeyTextField, asLink } from "@prismicio/client";
-import { PrismicNextLink } from "@prismicio/next";
+import { asLink } from "@/utils/static-client";
+import { PrismicNextLink } from "@/components/StaticComponents";
 import Link from "next/link";
 import { MdMenu, MdClose } from "react-icons/md";
 import Button from "./Button";
@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 export default function NavBar({
   settings,
 }: {
-  settings: Content.SettingsDocument;
+  settings: any;
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -54,15 +54,15 @@ export default function NavBar({
               <PrismicNextLink
                 key={label}
                 className={clsx(
-                  "group block overflow-hidden rounded px-3 py-1 text-xl font-bold text-slate-900",
-                  pathname.includes(asLink(link) as string)
+                  "group block overflow-hidden rounded px-3 py-1 text-lg md:text-xl font-bold text-slate-900",
+                  (asLink(link) === "/" ? pathname === "/" : pathname.startsWith(asLink(link) as string))
                     ? "text-yellow-500"
                     : "text-slate-900"
                 )}
                 field={link}
                 onClick={() => setOpen(false)} // Close menu on link click
                 aria-current={
-                  pathname.includes(asLink(link) as string)
+                  (asLink(link) === "/" ? pathname === "/" : pathname.startsWith(asLink(link) as string))
                     ? "page"
                     : undefined
                 }
@@ -83,7 +83,7 @@ export default function NavBar({
   );
 }
 
-function NameLogo({ name }: { name: KeyTextField }) {
+function NameLogo({ name }: { name: string }) {
   return (
     <Link
       href="/"
@@ -99,7 +99,7 @@ function DesktopMenu({
   settings,
   pathname,
 }: {
-  settings: Content.SettingsDocument;
+  settings: any;
   pathname: string;
 }) {
   return (
@@ -112,13 +112,13 @@ function DesktopMenu({
           )}
           field={link}
           aria-current={
-            pathname.includes(asLink(link) as string) ? "page" : undefined
+            (asLink(link) === "/" ? pathname === "/" : pathname.startsWith(asLink(link) as string)) ? "page" : undefined
           }
         >
           <span
             className={clsx(
               "absolute inset-0 z-0 h-full rounded bg-yellow-300 transition-transform duration-300 ease-in-out group-hover:translate-y-0",
-              pathname.includes(asLink(link) as string)
+              (asLink(link) === "/" ? pathname === "/" : pathname.startsWith(asLink(link) as string))
                 ? "translate-y-6"
                 : "translate-y-8"
             )}
