@@ -12,6 +12,12 @@ const AdminLogin = () => {
     setLoading(true);
     setError('');
 
+    if (!password.trim()) {
+      setError('Password is required');
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/admin/auth/login', {
         method: 'POST',
@@ -23,15 +29,23 @@ const AdminLogin = () => {
       });
 
       if (response.ok) {
-        // Force a full page redirect to ensure cookies are properly set
-        window.location.href = '/admin';
+        // Small delay to ensure cookie is set before redirect
+        setTimeout(() => {
+          window.location.href = '/admin';
+        }, 100);
       } else {
-        const data = await response.json();
-        setError(data.error || 'Invalid password');
+        let errorMessage = 'Login failed';
+        try {
+          const data = await response.json();
+          errorMessage = data.error || errorMessage;
+        } catch {
+          errorMessage = `Login failed (${response.status})`;
+        }
+        setError(errorMessage);
       }
     } catch (error) {
       console.error('Login error:', error);
-      setError('Login failed. Please try again.');
+      setError('Network error. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
