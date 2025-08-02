@@ -151,10 +151,25 @@ export const staticBlogPosts: StaticBlogPost[] = [
     uid: "getting-started-with-nextjs",
     data: {
       title: "Getting Started with Next.js",
+      date: "2024-01-15",
       hover_image: {
         url: "https://via.placeholder.com/320x220/0070f3/ffffff?text=Next.js",
         alt: "Next.js tutorial"
-      }
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "Next.js is a powerful React framework that enables you to build production-ready applications with ease."
+              }
+            ]
+          }
+        }
+      ]
     },
     tags: ["Next.js", "React", "Web Development"]
   },
@@ -162,10 +177,25 @@ export const staticBlogPosts: StaticBlogPost[] = [
     uid: "mastering-typescript",
     data: {
       title: "Mastering TypeScript",
+      date: "2024-01-10",
       hover_image: {
         url: "https://via.placeholder.com/320x220/3178c6/ffffff?text=TypeScript",
         alt: "TypeScript guide"
-      }
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "TypeScript brings static typing to JavaScript, making your code more robust and maintainable."
+              }
+            ]
+          }
+        }
+      ]
     },
     tags: ["TypeScript", "JavaScript", "Programming"]
   }
