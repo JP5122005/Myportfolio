@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import { SliceZone } from "@prismicio/react";
+import { SliceZone } from "@/components/StaticComponents";
 
-import { createClient } from "@/prismicio";
+import { createClient } from "@/utils/static-client";
 import { components } from "@/slices";
 
 export default async function Page() {
