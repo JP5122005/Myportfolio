@@ -23,7 +23,7 @@ export default async function Page({ params }: { params: Params }) {
         hover_image: project.hoverImage ? { url: project.hoverImage, alt: project.title } : null,
         slices: project.content ? JSON.parse(project.content) : []
       },
-      tags: project.tags ? project.tags.split(',').map(tag => tag.trim()) : []
+      tags: project.tags && typeof project.tags === 'string' ? project.tags.split(',').map(tag => tag.trim()) : []
     };
 
     return <ContentBody page={page} />;
