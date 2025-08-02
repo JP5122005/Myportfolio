@@ -25,9 +25,13 @@ export function Shapes() {
             blur={1}
             far={9}
           />
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[10, 10, 5]} intensity={1} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} color="#3b82f6" />
+          {/* Studio lighting setup */}
+          <ambientLight intensity={0.4} />
+          <directionalLight position={[10, 10, 5]} intensity={1.2} castShadow />
+          <directionalLight position={[-5, 8, 3]} intensity={0.8} color="#f8fafc" />
+          <pointLight position={[5, 5, 5]} intensity={0.6} color="#60a5fa" />
+          <pointLight position={[-5, -5, 2]} intensity={0.4} color="#a78bfa" />
+          <spotLight position={[0, 10, 0]} intensity={0.5} angle={0.3} penumbra={1} color="#fbbf24" />
         </Suspense>
       </Canvas>
     </div>
