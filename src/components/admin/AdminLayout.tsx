@@ -12,24 +12,14 @@ interface AdminLayoutProps {
 
 const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [mounted, setMounted] = useState(false);
+  
+  // Always call usePathname - never conditionally
+  const pathname = usePathname();
 
-  // Ensure component is mounted on client before using hooks
+  // Ensure component is mounted on client
   useEffect(() => {
-    setMounted(false);
-    const timer = setTimeout(() => setMounted(true), 0);
-    return () => clearTimeout(timer);
+    setMounted(true);
   }, []);
-
-  // Get pathname safely only after mounting
-  let pathname = '/admin';
-  if (mounted) {
-    try {
-      pathname = usePathname();
-    } catch (error) {
-      console.warn('Error getting pathname, using fallback:', error);
-      pathname = '/admin';
-    }
-  }
 
   const navItems = [
     { href: '/admin', label: 'Dashboard', exact: true },
@@ -52,6 +42,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   {navItems.map((item) => {
+                    // Only compute active state after mounting to avoid hydration mismatch
                     const isActive = mounted && (item.exact 
                       ? pathname === item.href 
                       : pathname.startsWith(item.href));
