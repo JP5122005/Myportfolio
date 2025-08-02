@@ -1,14 +1,16 @@
 import Bounded from "../../components/Bounded";
 import Heading from "../../components/Heading";
-import { Content, isFilled } from "@prismicio/client";
-import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
+import { isFilled } from "@/utils/static-client";
+import { PrismicRichText } from "@/components/StaticComponents";
 import ContentList from "./ContentList";
-import { createClient } from "@/prismicio";
+import { createClient } from "@/utils/static-client";
 
 /**
  * Props for `ContentIndex`.
  */
-export type ContentIndexProps = SliceComponentProps<Content.ContentIndexSlice>;
+export type ContentIndexProps = {
+  slice: any;
+};
 
 /**
  * Component for "ContentIndex" Slices.
