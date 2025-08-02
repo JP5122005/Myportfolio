@@ -1,4 +1,5 @@
-import { db } from "./index";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
 import { 
   blogPostsTable, 
   projectsTable, 
@@ -12,11 +13,19 @@ import {
   staticProjects 
 } from "../data/static-data";
 
+if (!process.env.DATABASE_URL) {
+  throw new Error('DATABASE_URL is required for seeding');
+}
+
+const sql = neon(process.env.DATABASE_URL);
+const db = drizzle(sql);
+
 async function seed() {
   try {
     console.log("🌱 Seeding database with static data...");
 
     // Clear existing data
+    console.log("🧹 Clearing existing data...");
     await db.delete(blogPostsTable);
     await db.delete(projectsTable);
     await db.delete(settingsTable);
