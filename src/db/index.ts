@@ -8,7 +8,7 @@ let db: ReturnType<typeof drizzle> | null = null;
 if (process.env.DATABASE_URL) {
   try {
     const sql = neon(process.env.DATABASE_URL);
-    db = drizzle({ client: sql, schema });
+    db = drizzle(sql, { schema });
   } catch (error) {
     console.error('Failed to connect to database:', error);
     db = null;
