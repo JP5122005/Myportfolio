@@ -8,14 +8,13 @@ type Params = { uid: string };
 
 export default async function Page({ params }: { params: Params }) {
   const client = createClient();
-  const blogPosts = await client.getAllByType("blog_post");
-  const page = blogPosts.find(post => post.uid === params.uid);
-
-  if (!page) {
+  
+  try {
+    const page = await client.getByUID("blog_post", params.uid);
+    return <ContentBody page={page} />;
+  } catch (error) {
     notFound();
   }
-
-  return <ContentBody page={page} />;
 }
 
 export async function generateMetadata({
@@ -24,20 +23,20 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const client = createClient();
-  const blogPosts = await client.getAllByType("blog_post");
-  const page = blogPosts.find(post => post.uid === params.uid);
-
-  if (!page) {
+  
+  try {
+    const page = await client.getByUID("blog_post", params.uid);
+    
+    return {
+      title: page.data.title,
+      description: `Blog post: ${page.data.title}`,
+    };
+  } catch (error) {
     return {
       title: "Blog Post Not Found",
       description: "The requested blog post was not found.",
     };
   }
-
-  return {
-    title: page.data.title,
-    description: `Blog post: ${page.data.title}`,
-  };
 }
 
 export async function generateStaticParams() {
