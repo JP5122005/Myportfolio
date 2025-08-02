@@ -3,7 +3,7 @@ import Heading from "../../components/Heading";
 import { isFilled } from "@/utils/static-client";
 import { PrismicRichText } from "@/components/StaticComponents";
 import ContentList from "./ContentList";
-import { staticBlogPosts, staticProjects } from "@/data/static-data";
+import { getAllBlogPosts, getAllProjects } from "@/db/queries";
 
 /**
  * Props for `ContentIndex`.
@@ -15,14 +15,40 @@ export type ContentIndexProps = {
 /**
  * Component for "ContentIndex" Slices.
  */
-const ContentIndex = ({
+const ContentIndex = async ({
   slice,
-}: ContentIndexProps): JSX.Element => {
-  // Use static data directly instead of async client calls
+}: ContentIndexProps): Promise<JSX.Element> => {
+  // Fetch data from database instead of using static data
   const contentType = slice.primary.content_type || "Blog";
 
-  const items = contentType === "Blog" ? staticBlogPosts : staticProjects;
+  let items: any[] = [];
 
+  try {
+    if (contentType === "Blog") {
+      const blogPosts = await getAllBlogPosts(true); // Only published posts
+      items = blogPosts.map(post => ({
+        uid: post.uid,
+        data: {
+          title: post.title,
+          hover_image: post.hoverImage ? { url: post.hoverImage, alt: post.title } : null,
+        },
+        tags: post.tags ? post.tags.split(',').map(tag => tag.trim()) : []
+      }));
+    } else {
+      const projects = await getAllProjects(true); // Only published projects
+      items = projects.map(project => ({
+        uid: project.uid,
+        data: {
+          title: project.title,
+          hover_image: project.hoverImage ? { url: project.hoverImage, alt: project.title } : null,
+        },
+        tags: project.tags ? project.tags.split(',').map(tag => tag.trim()) : []
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching content:', error);
+    items = [];
+  }
 
   return (
     <Bounded
