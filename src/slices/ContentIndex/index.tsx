@@ -42,7 +42,7 @@ const ContentIndex = async ({
           title: project.title,
           hover_image: project.hoverImage ? { url: project.hoverImage, alt: project.title } : null,
         },
-        tags: project.tags ? project.tags.split(',').map(tag => tag.trim()) : []
+        tags: project.tags && typeof project.tags === 'string' ? project.tags.split(',').map(tag => tag.trim()) : []
       }));
     }
   } catch (error) {
