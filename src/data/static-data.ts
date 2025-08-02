@@ -137,7 +137,7 @@ export const staticHomepage: StaticPage = {
         content_type: "Project",
         view_more_text: "View Project",
         fallback_item_image: {
-          url: "https://via.placeholder.com/320x220/475569/f1f5f9?text=Project",
+          url: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
           alt: "Project image"
         }
       }
