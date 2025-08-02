@@ -32,7 +32,7 @@ const ContentIndex = async ({
           title: post.title,
           hover_image: post.hoverImage ? { url: post.hoverImage, alt: post.title } : null,
         },
-        tags: post.tags ? post.tags.split(',').map(tag => tag.trim()) : []
+        tags: post.tags && typeof post.tags === 'string' ? post.tags.split(',').map(tag => tag.trim()) : []
       }));
     } else {
       const projects = await getAllProjects(true); // Only published projects
