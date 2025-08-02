@@ -1,8 +1,20 @@
 import { Metadata } from "next";
 import { SliceZone } from "@/components/StaticComponents";
 import { components } from "@/slices";
+import { getSettings } from "@/db/queries";
 
 export default async function BlogPage() {
+  // Get settings from database for title
+  let settings;
+  try {
+    settings = await getSettings();
+  } catch (error) {
+    console.error('Error fetching settings:', error);
+    settings = null;
+  }
+
+  const name = settings?.name || "Jenil Patel";
+
   const blogPageData = {
     slices: [
       {
@@ -40,8 +52,18 @@ export default async function BlogPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  let settings;
+  try {
+    settings = await getSettings();
+  } catch (error) {
+    console.error('Error fetching settings:', error);
+    settings = null;
+  }
+
+  const name = settings?.name || "Jenil Patel";
+
   return {
-    title: "Blog - Jenil Patel",
+    title: `Blog - ${name}`,
     description: "Read my latest blog posts about web development, programming, and technology.",
   };
 }
