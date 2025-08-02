@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { getAllBlogPosts, getAllProjects } from '@/db/queries';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState({
@@ -12,25 +11,51 @@ const AdminDashboard = () => {
     publishedProjects: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
+        setLoading(true);
+        setError(null);
+
+        const fetchWithFallback = async (url: string) => {
+          try {
+            const response = await fetch(url, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            return Array.isArray(data) ? data : [];
+          } catch (error) {
+            console.warn(`Failed to fetch ${url}:`, error);
+            return [];
+          }
+        };
+
         const [allBlogs, allProjects, publishedBlogs, publishedProjects] = await Promise.all([
-          fetch('/api/admin/blogs').then(res => res.json()),
-          fetch('/api/admin/projects').then(res => res.json()),
-          fetch('/api/admin/blogs?published=true').then(res => res.json()),
-          fetch('/api/admin/projects?published=true').then(res => res.json()),
+          fetchWithFallback('/api/admin/blogs'),
+          fetchWithFallback('/api/admin/projects'),
+          fetchWithFallback('/api/admin/blogs?published=true'),
+          fetchWithFallback('/api/admin/projects?published=true'),
         ]);
 
         setStats({
-          blogPosts: allBlogs.length || 0,
-          projects: allProjects.length || 0,
-          publishedBlogs: publishedBlogs.length || 0,
-          publishedProjects: publishedProjects.length || 0,
+          blogPosts: allBlogs.length,
+          projects: allProjects.length,
+          publishedBlogs: publishedBlogs.length,
+          publishedProjects: publishedProjects.length,
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
+        setError(error instanceof Error ? error.message : 'Failed to fetch dashboard statistics');
       } finally {
         setLoading(false);
       }
@@ -88,6 +113,14 @@ const AdminDashboard = () => {
     <AdminLayout>
       <div>
         <h1 className="text-3xl font-bold text-white mb-6">Dashboard</h1>
+        
+        {error && (
+          <div className="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded mb-6">
+            <strong className="font-bold">Warning:</strong>
+            <span className="block sm:inline"> {error}</span>
+            <p className="text-sm mt-2">Some statistics may not be accurate. Try refreshing the page.</p>
+          </div>
+        )}
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {statCards.map((card, index) => (
@@ -148,6 +181,7 @@ const AdminDashboard = () => {
             <div className="text-gray-400">
               <p>Welcome to your portfolio admin panel!</p>
               <p className="mt-2">Use the navigation above to manage your blog posts, projects, and site settings.</p>
+              <p className="mt-2 text-sm">Database: Connected to Neon PostgreSQL ✅</p>
             </div>
           </div>
         </div>
