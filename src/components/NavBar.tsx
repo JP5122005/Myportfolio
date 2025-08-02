@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import React, { useState } from "react";
-import { Content, KeyTextField, asLink } from "@prismicio/client";
-import { PrismicNextLink } from "@prismicio/next";
+import { asLink } from "@/utils/static-client";
+import { PrismicNextLink } from "@/components/StaticComponents";
 import Link from "next/link";
 import { MdMenu, MdClose } from "react-icons/md";
 import Button from "./Button";
@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 export default function NavBar({
   settings,
 }: {
-  settings: Content.SettingsDocument;
+  settings: any;
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -83,7 +83,7 @@ export default function NavBar({
   );
 }
 
-function NameLogo({ name }: { name: KeyTextField }) {
+function NameLogo({ name }: { name: string }) {
   return (
     <Link
       href="/"
@@ -99,7 +99,7 @@ function DesktopMenu({
   settings,
   pathname,
 }: {
-  settings: Content.SettingsDocument;
+  settings: any;
   pathname: string;
 }) {
   return (
