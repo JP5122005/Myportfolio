@@ -54,7 +54,7 @@ export default function NavBar({
               <PrismicNextLink
                 key={label}
                 className={clsx(
-                  "group block overflow-hidden rounded px-3 py-1 text-xl font-bold text-slate-900",
+                  "group block overflow-hidden rounded px-3 py-1 text-lg md:text-xl font-bold text-slate-900",
                   pathname.includes(asLink(link) as string)
                     ? "text-yellow-500"
                     : "text-slate-900"
