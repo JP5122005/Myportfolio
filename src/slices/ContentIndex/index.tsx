@@ -15,16 +15,15 @@ export type ContentIndexProps = {
 /**
  * Component for "ContentIndex" Slices.
  */
-const ContentIndex = async ({
+const ContentIndex = ({
   slice,
-}: ContentIndexProps): Promise<JSX.Element> => {
-  const client = createClient();
-  const blogPosts = await client.getAllByType("blog_post");
-  const projects = await client.getAllByType("project");
+}: ContentIndexProps): JSX.Element => {
+  // Use static data directly instead of async client calls
+  const contentType = slice.primary.content_type || "Blog";
 
-  const contentType = slice.primary.content_type || "Blog"
-
-  const items = contentType === "Blog" ? blogPosts : projects;
+  // Import static data directly
+  const { staticBlogPosts, staticProjects } = require("@/data/static-data");
+  const items = contentType === "Blog" ? staticBlogPosts : staticProjects;
 
 
   return (
