@@ -1,10 +1,8 @@
 "use client";
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 const AdminLogin = () => {
-  const router = useRouter();
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,16 +19,18 @@ const AdminLogin = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ password }),
+        credentials: 'include', // Important for cookies
       });
 
       if (response.ok) {
-        router.push('/admin');
-        router.refresh();
+        // Force a full page redirect to ensure cookies are properly set
+        window.location.href = '/admin';
       } else {
         const data = await response.json();
         setError(data.error || 'Invalid password');
       }
     } catch (error) {
+      console.error('Login error:', error);
       setError('Login failed. Please try again.');
     } finally {
       setLoading(false);
