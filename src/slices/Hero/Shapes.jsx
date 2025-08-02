@@ -64,10 +64,15 @@ function Geometries() {
   ];
 
   const soundEffects = [
-    new Audio("/sounds/hit2.ogg"),
-    new Audio("/sounds/hit3.ogg"),
-    new Audio("/sounds/hit4.ogg"),
-  ];
+    "/sounds/hit2.ogg",
+    "/sounds/hit3.ogg",
+    "/sounds/hit4.ogg",
+  ].map(src => {
+    const audio = new Audio(src);
+    audio.preload = "auto";
+    audio.onerror = () => console.warn(`Failed to load audio: ${src}`);
+    return audio;
+  });
 
   const materials = [
     new THREE.MeshNormalMaterial(),
