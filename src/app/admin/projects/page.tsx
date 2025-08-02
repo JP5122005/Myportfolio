@@ -8,15 +8,38 @@ import { Project } from '@/db/schema';
 const ProjectsManagement = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showOnlyPublished, setShowOnlyPublished] = useState(false);
 
   const fetchProjects = async () => {
     try {
-      const response = await fetch(`/api/admin/projects${showOnlyPublished ? '?published=true' : ''}`);
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(`/api/admin/projects${showOnlyPublished ? '?published=true' : ''}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
-      setProjects(data);
+      
+      if (Array.isArray(data)) {
+        setProjects(data);
+      } else {
+        console.error('Unexpected response format:', data);
+        setError('Unexpected response format from server');
+        setProjects([]);
+      }
     } catch (error) {
       console.error('Error fetching projects:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch projects');
+      setProjects([]);
     } finally {
       setLoading(false);
     }
@@ -34,16 +57,20 @@ const ProjectsManagement = () => {
     try {
       const response = await fetch(`/api/admin/projects/${uid}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
-      if (response.ok) {
-        setProjects(projects.filter(project => project.uid !== uid));
-      } else {
-        alert('Error deleting project');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
+
+      setProjects(projects.filter(project => project.uid !== uid));
     } catch (error) {
       console.error('Error deleting project:', error);
-      alert('Error deleting project');
+      alert(`Error deleting project: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -63,13 +90,17 @@ const ProjectsManagement = () => {
         }),
       });
 
-      if (response.ok) {
-        setProjects(projects.map(p => 
-          p.uid === uid ? { ...p, published: !currentStatus } : p
-        ));
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
+
+      setProjects(projects.map(p => 
+        p.uid === uid ? { ...p, published: !currentStatus } : p
+      ));
     } catch (error) {
       console.error('Error updating project:', error);
+      alert(`Error updating project: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -86,6 +117,23 @@ const ProjectsManagement = () => {
               </div>
             ))}
           </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminLayout>
+        <div className="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded mb-6">
+          <strong className="font-bold">Error:</strong>
+          <span className="block sm:inline"> {error}</span>
+          <button 
+            onClick={fetchProjects}
+            className="mt-2 bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+          >
+            Retry
+          </button>
         </div>
       </AdminLayout>
     );
