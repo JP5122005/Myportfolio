@@ -44,6 +44,18 @@ export default function ContentBody({
         <p className="mt-8 border-b border-b-slate-600 text-base md:text-lg lg:text-xl font-medium text-slate-300">
           {formattedDate}
         </p>
+
+        {/* Featured Image */}
+        {page.data.hover_image && (
+          <div className="mt-8 mb-8">
+            <PrismicNextImage
+              field={page.data.hover_image}
+              className="w-full h-auto rounded-lg object-cover max-h-96"
+              alt={page.data.title}
+            />
+          </div>
+        )}
+
         <div className="prose prose-base md:prose-lg prose-invert mt-12 w-full max-w-none md:mt-20">
           <SliceZone slices={page.data.slices} components={components} />
         </div>
