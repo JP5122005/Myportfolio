@@ -1,4 +1,4 @@
-import { SliceZone } from "@/components/StaticComponents";
+import { SliceZone, PrismicNextImage } from "@/components/StaticComponents";
 import { components } from "@/slices";
 import Bounded from "./Bounded";
 import Heading from "./Heading";
