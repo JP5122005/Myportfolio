@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { Content, KeyTextField } from "@prismicio/client";
-import { SliceComponentProps } from "@prismicio/react";
 import { Shapes } from "@/slices/Hero/Shapes";
 import Bounded from "../../components/Bounded";
 import gsap from "gsap";
@@ -9,7 +7,9 @@ import gsap from "gsap";
 /**
  * Props for `Hero`.
  */
-export type HeroProps = SliceComponentProps<Content.HeroSlice>;
+export type HeroProps = {
+  slice: any;
+};
 
 /**
  * Component for "Hero" Slices.
@@ -55,7 +55,7 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
     return () => ctx.revert(); // cleanup!
   }, []);
 
-  const renderLetters = (name: KeyTextField, key: string) => {
+  const renderLetters = (name: string, key: string) => {
     if (!name) return;
     return name.split("").map((letter, index) => (
       <span
