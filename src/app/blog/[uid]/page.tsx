@@ -24,15 +24,19 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const client = createClient();
-  const page = await client
-    .getByUID("blog_post", params.uid)
-    .catch(() => notFound());
+  const blogPosts = await client.getAllByType("blog_post");
+  const page = blogPosts.find(post => post.uid === params.uid);
+
+  if (!page) {
+    return {
+      title: "Blog Post Not Found",
+      description: "The requested blog post was not found.",
+    };
+  }
 
   return {
-    title: page.data.meta_title,
-    description: page.data.meta_description,
-    manifest: page.data.meta_image.url,
-
+    title: page.data.title,
+    description: `Blog post: ${page.data.title}`,
   };
 }
 
