@@ -51,7 +51,9 @@ export interface StaticBlogPost {
   uid: string;
   data: {
     title: string;
+    date: string;
     hover_image?: StaticImage;
+    slices: StaticSlice[];
   };
   tags: string[];
 }
@@ -60,7 +62,9 @@ export interface StaticProject {
   uid: string;
   data: {
     title: string;
+    date: string;
     hover_image?: StaticImage;
+    slices: StaticSlice[];
   };
   tags: string[];
 }
