@@ -9,10 +9,10 @@ type Params = { uid: string };
 export default function ContentBody({
   page,
 }: {
-  page: Content.BlogPostDocument | Content.ProjectDocument;
+  page: any;
 }) {
-  function formatDate(date: DateField) {
-    if (isFilled.date(date)) {
+  function formatDate(date: string) {
+    if (date) {
       const dateOptions: Intl.DateTimeFormatOptions = {
         weekday: "long",
         year: "numeric",
@@ -23,6 +23,7 @@ export default function ContentBody({
         new Date(date)
       );
     }
+    return new Date().toLocaleDateString();
   }
   const formattedDate = formatDate(page.data.date);
 
