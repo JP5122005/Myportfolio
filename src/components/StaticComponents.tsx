@@ -103,14 +103,16 @@ export function PrismicNextImage({ field, className, imgixParams, alt }: Prismic
   }
 
   const imageAlt = alt || field.alt || '';
-  
+
   return (
     <Image
       src={field.url}
       alt={imageAlt}
-      width={field.width || 600}
-      height={field.height || 400}
+      width={field.width || 800}
+      height={field.height || 800}
       className={className}
+      priority
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
     />
   );
 }
