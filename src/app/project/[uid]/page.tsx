@@ -24,14 +24,19 @@ export async function generateMetadata({
   params: Params;
 }): Promise<Metadata> {
   const client = createClient();
-  const page = await client
-    .getByUID("project", params.uid)
-    .catch(() => notFound());
+  const projects = await client.getAllByType("project");
+  const page = projects.find(project => project.uid === params.uid);
+
+  if (!page) {
+    return {
+      title: "Project Not Found",
+      description: "The requested project was not found.",
+    };
+  }
 
   return {
-    title: page.data.meta_title,
-    description: page.data.meta_description,
-    manifest: page.data.meta_image.url,
+    title: page.data.title,
+    description: `Project: ${page.data.title}`,
   };
 }
 
