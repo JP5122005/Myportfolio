@@ -8,9 +8,12 @@ type Params = { uid: string };
 
 export default async function Page({ params }: { params: Params }) {
   const client = createClient();
-  const page = await client
-    .getByUID("project", params.uid)
-    .catch(() => notFound());
+  const projects = await client.getAllByType("project");
+  const page = projects.find(project => project.uid === params.uid);
+
+  if (!page) {
+    notFound();
+  }
 
   return <ContentBody page={page} />;
 }
