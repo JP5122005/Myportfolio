@@ -55,14 +55,14 @@ export default function NavBar({
                 key={label}
                 className={clsx(
                   "group block overflow-hidden rounded px-3 py-1 text-lg md:text-xl font-bold text-slate-900",
-                  pathname.includes(asLink(link) as string)
+                  (asLink(link) === "/" ? pathname === "/" : pathname.startsWith(asLink(link) as string))
                     ? "text-yellow-500"
                     : "text-slate-900"
                 )}
                 field={link}
                 onClick={() => setOpen(false)} // Close menu on link click
                 aria-current={
-                  pathname.includes(asLink(link) as string)
+                  (asLink(link) === "/" ? pathname === "/" : pathname.startsWith(asLink(link) as string))
                     ? "page"
                     : undefined
                 }
