@@ -8,15 +8,38 @@ import { BlogPost } from '@/db/schema';
 const BlogsManagement = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showOnlyPublished, setShowOnlyPublished] = useState(false);
 
   const fetchBlogs = async () => {
     try {
-      const response = await fetch(`/api/admin/blogs${showOnlyPublished ? '?published=true' : ''}`);
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(`/api/admin/blogs${showOnlyPublished ? '?published=true' : ''}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
-      setBlogs(data);
+      
+      if (Array.isArray(data)) {
+        setBlogs(data);
+      } else {
+        console.error('Unexpected response format:', data);
+        setError('Unexpected response format from server');
+        setBlogs([]);
+      }
     } catch (error) {
       console.error('Error fetching blogs:', error);
+      setError(error instanceof Error ? error.message : 'Failed to fetch blogs');
+      setBlogs([]);
     } finally {
       setLoading(false);
     }
@@ -34,16 +57,20 @@ const BlogsManagement = () => {
     try {
       const response = await fetch(`/api/admin/blogs/${uid}`, {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
-      if (response.ok) {
-        setBlogs(blogs.filter(blog => blog.uid !== uid));
-      } else {
-        alert('Error deleting blog post');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
+
+      setBlogs(blogs.filter(blog => blog.uid !== uid));
     } catch (error) {
       console.error('Error deleting blog:', error);
-      alert('Error deleting blog post');
+      alert(`Error deleting blog post: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -63,13 +90,17 @@ const BlogsManagement = () => {
         }),
       });
 
-      if (response.ok) {
-        setBlogs(blogs.map(b => 
-          b.uid === uid ? { ...b, published: !currentStatus } : b
-        ));
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
       }
+
+      setBlogs(blogs.map(b => 
+        b.uid === uid ? { ...b, published: !currentStatus } : b
+      ));
     } catch (error) {
       console.error('Error updating blog:', error);
+      alert(`Error updating blog post: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -86,6 +117,23 @@ const BlogsManagement = () => {
               </div>
             ))}
           </div>
+        </div>
+      </AdminLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminLayout>
+        <div className="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded mb-6">
+          <strong className="font-bold">Error:</strong>
+          <span className="block sm:inline"> {error}</span>
+          <button 
+            onClick={fetchBlogs}
+            className="mt-2 bg-red-700 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
+          >
+            Retry
+          </button>
         </div>
       </AdminLayout>
     );
