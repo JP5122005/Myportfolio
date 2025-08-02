@@ -332,5 +332,57 @@ export const staticProjects: StaticProject[] = [
       ]
     },
     tags: ["Vue.js", "Express", "PostgreSQL"]
+  },
+  {
+    uid: "mobile-app",
+    data: {
+      title: "React Native Mobile App",
+      date: "2023-10-15",
+      hover_image: {
+        url: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
+        alt: "Mobile app development"
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "Cross-platform mobile application built with React Native, featuring offline capabilities and real-time synchronization."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    tags: ["React Native", "Mobile", "JavaScript"]
+  },
+  {
+    uid: "data-visualization",
+    data: {
+      title: "Data Visualization Dashboard",
+      date: "2023-09-20",
+      hover_image: {
+        url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
+        alt: "Data visualization"
+      },
+      slices: [
+        {
+          slice_type: "text_block",
+          variation: "default",
+          primary: {
+            text: [
+              {
+                type: "paragraph",
+                text: "Interactive data visualization dashboard with real-time analytics, charts, and reporting features using D3.js and React."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    tags: ["D3.js", "React", "Analytics"]
   }
 ];
