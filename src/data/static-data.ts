@@ -209,7 +209,7 @@ export const staticProjects: StaticProject[] = [
       title: "3D Portfolio Website",
       date: "2024-01-01",
       hover_image: {
-        url: "https://via.placeholder.com/320x220/64748b/f1f5f9?text=Portfolio",
+        url: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=320&h=220&q=80",
         alt: "3D Portfolio"
       },
       slices: [
