@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
+import ImageUpload from '@/components/admin/ImageUpload';
 
 const NewProject = () => {
   const router = useRouter();
@@ -75,6 +76,14 @@ const NewProject = () => {
     }));
   };
 
+  const handleImageUploaded = (imageUrl: string, altText?: string) => {
+    setFormData(prev => ({
+      ...prev,
+      hoverImageUrl: imageUrl,
+      hoverImageAlt: altText || '',
+    }));
+  };
+
   return (
     <AdminLayout>
       <div>
@@ -129,30 +138,13 @@ const NewProject = () => {
             </div>
 
             <div>
-              <label htmlFor="hoverImageUrl" className="block text-sm font-medium text-gray-300 mb-2">
-                Image URL (optional)
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Project Image
               </label>
-              <input
-                type="url"
-                id="hoverImageUrl"
-                name="hoverImageUrl"
-                value={formData.hoverImageUrl}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="hoverImageAlt" className="block text-sm font-medium text-gray-300 mb-2">
-                Image Alt Text (optional)
-              </label>
-              <input
-                type="text"
-                id="hoverImageAlt"
-                name="hoverImageAlt"
-                value={formData.hoverImageAlt}
-                onChange={handleChange}
-                className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+              <ImageUpload
+                onImageUploaded={handleImageUploaded}
+                currentImageUrl={formData.hoverImageUrl}
+                altText={formData.hoverImageAlt}
               />
             </div>
 
