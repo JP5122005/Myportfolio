@@ -1,11 +1,10 @@
-import { KeyTextField, LinkField } from "@prismicio/client";
-import { PrismicNextLink } from "@prismicio/next";
+import { PrismicNextLink } from "@/components/StaticComponents";
 import clsx from "clsx";
 import { MdArrowOutward } from "react-icons/md";
 
 type ButtonProps = {
-  linkField: LinkField;
-  label: KeyTextField;
+  linkField: any;
+  label: string;
   showIcon?: boolean;
   className?: string;
 };
