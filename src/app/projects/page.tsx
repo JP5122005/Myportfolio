@@ -1,8 +1,20 @@
 import { Metadata } from "next";
 import { SliceZone } from "@/components/StaticComponents";
 import { components } from "@/slices";
+import { getSettings } from "@/db/queries";
 
 export default async function ProjectsPage() {
+  // Get settings from database for title
+  let settings;
+  try {
+    settings = await getSettings();
+  } catch (error) {
+    console.error('Error fetching settings:', error);
+    settings = null;
+  }
+
+  const name = settings?.name || "Jenil Patel";
+
   const projectsPageData = {
     slices: [
       {
@@ -69,8 +81,18 @@ export default async function ProjectsPage() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  let settings;
+  try {
+    settings = await getSettings();
+  } catch (error) {
+    console.error('Error fetching settings:', error);
+    settings = null;
+  }
+
+  const name = settings?.name || "Jenil Patel";
+
   return {
-    title: "Projects - Jenil Patel",
+    title: `Projects - ${name}`,
     description: "Browse through my portfolio of projects showcasing modern web development skills.",
   };
 }
