@@ -1,8 +1,8 @@
-import { SliceZone } from "@prismicio/react";
+import { SliceZone } from "@/components/StaticComponents";
 import { components } from "@/slices";
 import Bounded from "./Bounded";
 import Heading from "./Heading";
-import { Content, DateField, isFilled } from "@prismicio/client";
+import { isFilled } from "@/utils/static-client";
 
 type Params = { uid: string };
 
