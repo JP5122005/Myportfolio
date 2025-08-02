@@ -118,7 +118,13 @@ function Geometry({ r, position, geometry, soundEffects, materials }) {
   function handleClick(e) {
     const mesh = e.object;
 
-    gsap.utils.random(soundEffects).play();
+    // Play sound with error handling
+    try {
+      const audio = gsap.utils.random(soundEffects);
+      audio.play().catch(error => console.warn("Audio play failed:", error));
+    } catch (error) {
+      console.warn("Audio playback error:", error);
+    }
 
     gsap.to(mesh.rotation, {
       x: `+=${gsap.utils.random(0, 2)}`,
